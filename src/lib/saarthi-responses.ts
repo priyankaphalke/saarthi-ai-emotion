@@ -1577,9 +1577,8 @@ export function generateResponse(
     explanation = mode === "simple" ? topic.simple : mode === "exam" ? topic.exam : topic.interview;
     practice = topic.practice;
   } else {
-    // Fallback: still provide structured, helpful content
     explanation = buildGenericExplanation(message, mode);
-    practice = "Try rephrasing your question or asking about a specific CS topic like recursion, linked lists, sorting, OOP, binary search, or dynamic programming! 🎯";
+    practice = buildGenericPractice(message);
   }
 
   const confidenceDelta = emotion === "confused" ? 3 : emotion === "fearful" ? 2 : emotion === "frustrated" ? 2 : emotion === "curious" ? 2 : 1;
@@ -1852,32 +1851,99 @@ def dfs(graph, node, visited=None):
 **⚡ Summary:** Graphs model relationships. BFS for shortest path, DFS for exploration. Master both!`;
   }
 
-  // Default: provide helpful structured response
-  return `## 📚 Let's Explore This!
+  // Default: build a structured explanation from the question itself
+  const topic = extractTopicFromMessage(message);
+  
+  if (mode === "simple") {
+    return `## 📚 ${topic}
 
-I'd love to give you a deep explanation! Here's what I can teach you in detail:
+**What is ${topic}?**
+${topic} is an important concept that forms the foundation for deeper understanding in this field. Let's break it down clearly.
 
-**🖥️ Data Structures:**
-- Arrays, Linked Lists, Stacks, Queues
-- Trees (BST, AVL, Heaps)
-- Graphs, Hash Tables
+**🌍 How to Think About It:**
+Think of ${topic} as a building block — just like how bricks come together to form a building, understanding ${topic} helps you grasp more advanced ideas later.
 
-**⚙️ Algorithms:**
-- Sorting (Bubble, Merge, Quick Sort)
-- Searching (Linear, Binary Search)
-- Recursion & Dynamic Programming
-- Graph Algorithms (BFS, DFS)
+**📝 Key Points:**
+1. **Core Idea:** ${topic} refers to the fundamental principle or mechanism behind how something works in this domain
+2. **Why It Matters:** Understanding ${topic} helps you solve problems more effectively and builds a strong foundation
+3. **Where It's Used:** ${topic} appears in many real-world applications, from everyday technology to advanced research
 
-**🏗️ Concepts:**
-- OOP (Encapsulation, Inheritance, Polymorphism, Abstraction)
-- Time & Space Complexity
-- Database concepts
+**💡 Simple Example:**
+Imagine you're learning to cook. ${topic} is like understanding what each ingredient does — once you know that, you can create any recipe!
 
-**Try asking something specific like:**
-- "Explain binary search with an example"
-- "What is dynamic programming?"
-- "How does a hash map work?"
-- "Mujhe recursion samjhao"
+**⚡ Quick Summary:**
+${topic} is a foundational concept. Focus on understanding the "why" behind it, not just the "what". Once you grasp the core idea, related concepts become much easier!`;
+  }
 
-I'll give you a complete explanation with examples, analogies, code, and practice questions! 🎯`;
+  if (mode === "exam") {
+    return `## 📝 ${topic} — Exam-Ready Answer
+
+**Definition:**
+${topic} is a key concept in this subject area that deals with the underlying principles and mechanisms.
+
+**Key Points to Remember:**
+1. ${topic} forms the basis for understanding more complex topics
+2. It has both theoretical importance and practical applications
+3. Questions on ${topic} often test conceptual clarity and application ability
+
+**How to Answer Exam Questions on ${topic}:**
+- Start with a clear **definition**
+- Provide a **relevant example**
+- Mention **applications** or **significance**
+- If applicable, include **diagrams or formulas**
+
+**Important Properties/Characteristics:**
+- Foundational to the subject
+- Connected to multiple related concepts
+- Has practical real-world applications
+
+**⚡ Summary:**
+For exams, focus on the definition, properties, and at least one example of ${topic}. Structure your answer with clear headings.`;
+  }
+
+  return `## 🎯 ${topic} — Interview-Ready Deep Dive
+
+**Concept Overview:**
+${topic} is a concept that interviewers use to test depth of understanding. It's not enough to know the definition — you need to understand the "why" and "how."
+
+**What You Should Know:**
+1. **The Basics:** Be able to explain ${topic} in simple terms, as if to a non-technical person
+2. **The Depth:** Understand the underlying mechanisms and trade-offs
+3. **The Application:** Know where and why ${topic} is used in practice
+4. **The Edge Cases:** Be aware of limitations and special scenarios
+
+**Interview Tips for ${topic}:**
+- Start with a concise definition (2-3 sentences max)
+- Use a real-world analogy to demonstrate understanding
+- Discuss trade-offs and alternatives
+- Mention a specific use case from your experience
+
+**Common Interview Questions:**
+- "Can you explain ${topic} in simple terms?"
+- "What are the advantages and disadvantages?"
+- "Where have you applied this concept?"
+- "How does ${topic} compare to [alternative]?"
+
+**⚡ Summary:**
+Master ${topic} by understanding it at three levels: definition, mechanism, and application. Interviewers value clarity over jargon.`;
+}
+
+function extractTopicFromMessage(message: string): string {
+  const lower = message.toLowerCase().trim();
+  // Remove common question prefixes
+  const cleaned = lower
+    .replace(/^(explain|what is|what are|define|tell me about|describe|how does|how do|how to|kya hai|samjhao|batao|mujhe|mujhe samjhao|what's|whats)\s*/i, "")
+    .replace(/[?.!]+$/, "")
+    .trim();
+  
+  if (cleaned.length > 0) {
+    // Capitalize first letter of each word
+    return cleaned.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  }
+  return "This Concept";
+}
+
+function buildGenericPractice(message: string): string {
+  const topic = extractTopicFromMessage(message);
+  return `Can you explain ${topic} in your own words? Try to use a real-world example! 🧠`;
 }
