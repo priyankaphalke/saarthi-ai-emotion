@@ -3,6 +3,7 @@
 > An intelligent AI-powered platform that understands user queries and provides guidance with emotional awareness.
 
 🏆 **Built for:** Elite Hack Online Hackathon 2026
+
 👨‍💻 **Team:** TECHGYANIS
 
 ---
