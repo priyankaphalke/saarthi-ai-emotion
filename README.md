@@ -8,7 +8,7 @@ This project was developed for **Elite Hack Online Hackathon 2026**.
 
 ## 🌐 Website
 
-🔗 https://saarthi-ai-emotion.lovable.app
+🔗 https://saarthi-spark.lovable.app/
 
 ---
 
